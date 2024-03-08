@@ -61,10 +61,14 @@ public class Main {
     }
 
     private static Long countEuclideanDistance(Integer x1, Integer y1, Integer x2, Integer y2){
-        Integer squareFirstSubtraction = (x2-x1)*(x2-x1);
-        Integer squareSecondSubtraction = (y2-y1)*(y2-y1);
+        Integer squareFirstSubtraction = subtractionSquared(x1, x2);
+        Integer squareSecondSubtraction = subtractionSquared(y1, y2);
         double distance = Math.sqrt(squareFirstSubtraction+squareSecondSubtraction);
         return Math.round(distance);
+    }
+
+    private static Integer subtractionSquared(Integer a, Integer b){
+        return ((b-a)*(b-a));
     }
 
 

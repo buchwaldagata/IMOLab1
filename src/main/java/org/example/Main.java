@@ -56,7 +56,7 @@ public class Main {
                     int x2 = Integer.parseInt(secondList[1]);
                     int y2 = Integer.parseInt(secondList[2]);
 
-                    Long countEuclideanDistance = CountEuclideanDistance(x1, y1, x2, y2);
+                    Long countEuclideanDistance = countEuclideanDistance(x1, y1, x2, y2);
                     System.out.print(countEuclideanDistance + " ");
                 }
                 System.out.println();
@@ -65,10 +65,7 @@ public class Main {
         return "hej";
     }
 
-
-
-
-    private static Long CountEuclideanDistance(Integer x1, Integer y1, Integer x2, Integer y2){
+    private static Long countEuclideanDistance(Integer x1, Integer y1, Integer x2, Integer y2){
         Integer squareFirstSubstraction = (x2-x1)*(x2-x1);
         Integer squareSecondSubstraction = (y2-y1)*(y2-y1);
         Double distance =Math.sqrt(squareFirstSubstraction+squareSecondSubstraction);

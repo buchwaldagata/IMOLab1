@@ -1,29 +1,59 @@
 package org.example;
 
+import javax.print.attribute.IntegerSyntax;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String distanceMatrixKroAString = countEuclideanDistanceFromFile("src/resources/kroA100.tsp");
-        String distanceMatrixKroBString = countEuclideanDistanceFromFile("src/resources/kroB100.tsp");
+        List<List<String>> preparedLinesFromFileKroA= prepareLinesFromFile("src/resources/kroA100.tsp");
+
+        List<List<Integer>> intPreparedLinesFromFileKroA = convertStringToListMatrix(preparedLinesFromFileKroA);
+        printListList(intPreparedLinesFromFileKroA);
+
+
+
+        String distanceMatrixKroAString = countEuclideanDistanceFromFile(preparedLinesFromFileKroA);
+
         int[][] distanceMatrixKroA = parseStringToDistanceMatrix(distanceMatrixKroAString);
-        int [][] distanceMatrixKroB = parseStringToDistanceMatrix(distanceMatrixKroBString);
-        displayDistanceMatrix(distanceMatrixKroA);
+         displayDistanceMatrix(distanceMatrixKroA);
         System.out.println();
-        displayDistanceMatrix(distanceMatrixKroB);
 
-    }
-
-    private static String countEuclideanDistanceFromFile(String path){
-        List<List<String>> preparedLinesFromFile = prepareLinesFromFile(path);
-        return getEuclideanDistance(preparedLinesFromFile);
+        GreedyNearestNeighborAlgorithm greedyNearestNeighborAlgorithm = new GreedyNearestNeighborAlgorithm();
+        greedyNearestNeighborAlgorithm.runAlgorithm();
     }
 
 
+    private static void printListList(List<List<Integer>> listList) {
+        for (List<Integer> row : listList) {
+            for (Integer value : row) {
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+    }
+    private static List<List<Integer>> convertStringToListMatrix(List<List<String>> stringMatrix){
+        List<List<Integer>> intMatrix = new ArrayList<>();
+        for (int i = 0; i < stringMatrix.size(); i++) {
+            List<String> row = stringMatrix.get(i);
+            List<Integer> row2 = splitAndConvertToNumbers(row.get(0));
+            intMatrix.add(row2);
+        }
+        return intMatrix;
+    }
+
+    private static List<Integer> splitAndConvertToNumbers(String inputString) {
+        String[] tokens = inputString.split("\\s+");
+        return Arrays.asList(
+                Integer.parseInt(tokens[0]),
+                Integer.parseInt(tokens[1]),
+                Integer.parseInt(tokens[2])
+        );
+    }
     private static List<List<String>> prepareLinesFromFile(String path) {
         List<List<String>> correctsLines = new ArrayList<>();
         int count = -1;
@@ -43,7 +73,7 @@ public class Main {
         return correctsLines;
     }
 
-    private static String getEuclideanDistance(List<List<String>> preparedLinesFromFile){
+    private static String countEuclideanDistanceFromFile(List<List<String>> preparedLinesFromFile){
         StringBuilder distanceMatrix = new StringBuilder();
         if (preparedLinesFromFile.size() > 1) {
             for (int i = 0; i < preparedLinesFromFile.size(); i++) {

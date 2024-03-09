@@ -8,9 +8,14 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String distanceMatrixKroA = countEuclideanDistanceFromFile("src/resources/kroA100.tsp");
-        String distanceMatrixKroB = countEuclideanDistanceFromFile("src/resources/kroB100.tsp");
-        System.out.println(distanceMatrixKroA);
+        String distanceMatrixKroAString = countEuclideanDistanceFromFile("src/resources/kroA100.tsp");
+        String distanceMatrixKroBString = countEuclideanDistanceFromFile("src/resources/kroB100.tsp");
+        int[][] distanceMatrixKroA = parseStringToDistanceMatrix(distanceMatrixKroAString);
+        int [][] distanceMatrixKroB = parseStringToDistanceMatrix(distanceMatrixKroBString);
+        displayDistanceMatrix(distanceMatrixKroA);
+        System.out.println();
+        displayDistanceMatrix(distanceMatrixKroB);
+
     }
 
     private static String countEuclideanDistanceFromFile(String path){
@@ -71,5 +76,29 @@ public class Main {
         return ((b-a)*(b-a));
     }
 
+    private static int[][] parseStringToDistanceMatrix(String stringDistanceMatrix){
+        String[] rows = stringDistanceMatrix.split("\n");
+        int rowCount = rows.length;
+        int[][] matrix = new int[rowCount][];
 
+        for (int i = 0; i < rowCount; i++) {
+            String[] elements = rows[i].split(" ");
+            int columnCount = elements.length;
+            matrix[i] = new int[columnCount];
+
+            for (int j = 0; j < columnCount; j++) {
+                matrix[i][j] = Integer.parseInt(elements[j]);
+            }
+        }
+        return matrix;
+    }
+
+    private static void displayDistanceMatrix(int[][] distanceMatrix){
+        for (int i = 0; i < distanceMatrix.length; i++) {
+            for (int j = 0; j < distanceMatrix[i].length; j++) {
+                System.out.print(distanceMatrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
 }

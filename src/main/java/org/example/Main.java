@@ -15,10 +15,7 @@ public class Main {
         List<List<Integer>> intPreparedLinesFromFileKroA = convertStringToListMatrix(preparedLinesFromFileKroA);
         printListList(intPreparedLinesFromFileKroA);
 
-
-
         String distanceMatrixKroAString = countEuclideanDistanceFromFile(preparedLinesFromFileKroA);
-
         int[][] distanceMatrixKroA = parseStringToDistanceMatrix(distanceMatrixKroAString);
          displayDistanceMatrix(distanceMatrixKroA);
         System.out.println();

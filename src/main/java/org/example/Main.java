@@ -43,7 +43,7 @@ public class Main {
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
         saveToFile(fileWriter,bufferedWriter,firstVertex,x1,y1,nameOfFile);
-        saveToFile(fileWriter,bufferedWriter,2,3,4,nameOfFile);
+//        saveToFile(fileWriter,bufferedWriter,2,3,4,nameOfFile);
 
         System.out.println(distanceMatrix2[firstVertex]);
 
@@ -74,16 +74,37 @@ public class Main {
 
         saveToFile(secondFileWriter,secondBufferedWriter,maxDistanceNumber,x2,y2,secondNameOfFile);
 
-
-        //tworzenie tablicy
         int[] table = createTable();
 
-        // usuniecie z niej wierzcholka pierwszego i ostatniego
+        // delete first and last vertex
         int[] newTable = deleteIndexFromTable(firstVertex, table);
         int[] secondNewTable = deleteIndexFromTable(maxDistanceNumber, newTable);
-        displayTable(newTable);
-        System.out.println();
-        displayTable(secondNewTable);
+//        displayTable(newTable);
+//        System.out.println();
+//        displayTable(secondNewTable);
+
+        int firstDistance = 1000000;
+        int secondDistance = 1000000;
+        int firstNextVertex = -1;
+        int secondNextValue = -1;
+//        for(int i = 0; i < secondNewTable.length; i++){
+//
+//        }
+
+        for (int j = 0; j < distanceMatrix2.length; j++){
+            int distance = Math.toIntExact(distanceMatrix2[firstVertex][j]);
+            if (distance != 0 && distance < firstDistance){
+                firstDistance = distance;
+                firstNextVertex = j;
+            }
+        }
+
+        int x = intCoordinateList[firstNextVertex][1];
+        int y = intCoordinateList[firstNextVertex][2];
+        saveToFile(fileWriter,bufferedWriter,firstNextVertex,x,y,nameOfFile);
+
+
+
 
 
         try {

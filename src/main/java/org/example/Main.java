@@ -1,13 +1,9 @@
 package org.example;
 
-import javax.print.attribute.IntegerSyntax;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
         List<List<String>> preparedLinesFromFileKroA= prepareLinesFromFile("src/resources/kroA100.tsp");
@@ -21,9 +17,52 @@ public class Main {
         System.out.println();
 
         GreedyNearestNeighborAlgorithm greedyNearestNeighborAlgorithm = new GreedyNearestNeighborAlgorithm();
-        greedyNearestNeighborAlgorithm.runAlgorithm();
+        int firstVertex = greedyNearestNeighborAlgorithm.runAlgorithm();
+        System.out.println(firstVertex);
+
+        System.out.println(preparedLinesFromFileKroA.get(firstVertex));
+        int x1 = intPreparedLinesFromFileKroA.get(firstVertex).get(1);
+        int y1 = intPreparedLinesFromFileKroA.get(firstVertex).get(2);
+        System.out.println(x1);
+        System.out.println(y1);
+
+        saveToFile(firstVertex,x1,y1,"Greedy Nearest Neighbor Algorithm - first");
+
+
+        // sprawdzenie najdalszego i zapisanie do drugiego pliku
+
+        System.out.println(distanceMatrixKroA[firstVertex]);
+
+        int maxDistance = 0;
+        int maxDistanceNumber = firstVertex;
+        for (int j = 0; j < distanceMatrixKroA[firstVertex].length; j++) {
+            if (distanceMatrixKroA[firstVertex][j] > maxDistance){
+                maxDistance = distanceMatrixKroA[firstVertex][j];
+                maxDistanceNumber = j;
+            }
+            System.out.print(distanceMatrixKroA[firstVertex][j] + " ");
+        }
+        System.out.println();
+        System.out.println(maxDistance);
+        System.out.println(maxDistanceNumber);
+
+
+        int x2 = intPreparedLinesFromFileKroA.get(maxDistanceNumber).get(1);
+        int y2 = intPreparedLinesFromFileKroA.get(maxDistanceNumber).get(2);
+        
+        
+        saveToFile(maxDistanceNumber,x2,y2,"Greedy Nearest Neighbor Algorithm - second");
+        //zapisanie drugiego do durgiego pliku
+
+
+
+
+
     }
 
+    private static void writePointToCsv(BufferedWriter bufferedWriter, int vertex, int x, int y) throws IOException {
+        bufferedWriter.write(vertex + "," + x + "," + y);
+    }
 
     private static void printListList(List<List<Integer>> listList) {
         for (List<Integer> row : listList) {
@@ -126,6 +165,20 @@ public class Main {
                 System.out.print(distanceMatrix[i][j] + " ");
             }
             System.out.println();
+        }
+    }
+    
+    private static void saveToFile(int firstVertex, int x, int y, String nameOfFile){
+        try {
+            FileWriter fileWriter = new FileWriter(nameOfFile);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            writePointToCsv(bufferedWriter, firstVertex, x, y);
+            bufferedWriter.close();
+
+            System.out.println("Liczby zostały zapisane do pliku " + nameOfFile);
+
+        } catch (IOException e) {
+            System.err.println("Wystąpił błąd podczas zapisywania do pliku: " + e.getMessage());
         }
     }
 }

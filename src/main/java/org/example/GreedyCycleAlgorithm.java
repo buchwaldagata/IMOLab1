@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GreedyCycleAlgorithm {
-    public void runAlgorithm(int[][] coordinateList, Long[][] distanceMatrix) {
+    public Long runAlgorithm(int firstVertex, int[][] coordinateList, Long[][] distanceMatrix) {
         List<Integer> unassignedVertices = new ArrayList<>();
         for(int i = 0; i < distanceMatrix.length; i++) {
             unassignedVertices.add(i);
@@ -22,7 +22,6 @@ public class GreedyCycleAlgorithm {
 
         // assign first vertex to first cycle
         RandomNumber randomNumber = new RandomNumber();
-        int firstVertex = randomNumber.drawNumber(distanceMatrix.length);
         addVertexToCycle(unassignedVertices, firstCycle, firstVertex, 0);
 
         // find max distance vertex
@@ -56,8 +55,9 @@ public class GreedyCycleAlgorithm {
         }
 
         // save cycles to files
-        saveCycle(coordinateList, firstCycle, "Greedy Cycle first");
-        saveCycle(coordinateList, secondCycle, "Greedy Cycle second");
+        saveCycle(coordinateList, firstCycle, "Greedy Cycle first" + firstVertex);
+        saveCycle(coordinateList, secondCycle, "Greedy Cycle second" + firstVertex);
+        return Main.getLengthFromCycle(firstCycle, distanceMatrix) + Main.getLengthFromCycle(secondCycle,distanceMatrix);
     }
 
     private static void addVertexToCycle(List<Integer> unassignedVertices, Map<Integer, Integer> cycle,

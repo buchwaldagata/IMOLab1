@@ -4,15 +4,20 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 class GreedyNearestNeighborAlgorithm {
-    public void runAlgorithm(int[][] intCoordinateList, Long[][] distanceMatrix2 ){
+    public Long runAlgorithm(int firstVertex, int[][] intCoordinateList, Long[][] distanceMatrix2 ){
+        // key - visit number
+        // value - vertex index
+        Map<Integer, Integer> firstCycle = new HashMap<>();
+        Map<Integer, Integer> secondCycle = new HashMap<>();
 
-        int firstVertex = chooseRandomNumber(100);
         int x1 = intCoordinateList[firstVertex][1];
         int y1 = intCoordinateList[firstVertex][2];
 
-        String nameOfFile = "Greedy neighbour first";
+        String nameOfFile = "Greedy neighbour first"+ firstVertex;
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(nameOfFile);
@@ -22,6 +27,7 @@ class GreedyNearestNeighborAlgorithm {
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
         Main.saveToFile(fileWriter,bufferedWriter,firstVertex,x1,y1,nameOfFile);
+        firstCycle.put(0, firstVertex);
         System.out.println(distanceMatrix2[firstVertex]);
 
         Long maxDistance = 0L;
@@ -40,7 +46,7 @@ class GreedyNearestNeighborAlgorithm {
         int x2 = intCoordinateList[maxDistanceNumber][1];
         int y2 = intCoordinateList[maxDistanceNumber][2];
 
-        String secondNameOfFile = "Greedy neighbour second";
+        String secondNameOfFile = "Greedy neighbour second" + firstVertex;
         FileWriter secondFileWriter = null;
         try {
             secondFileWriter = new FileWriter(secondNameOfFile);
@@ -50,7 +56,7 @@ class GreedyNearestNeighborAlgorithm {
         BufferedWriter secondBufferedWriter = new BufferedWriter(secondFileWriter);
 
         Main.saveToFile(secondFileWriter,secondBufferedWriter,maxDistanceNumber,x2,y2,secondNameOfFile);
-
+        secondCycle.put(0, maxDistanceNumber);
         int[] table = createTable();
 
         // delete first and last vertex from table and distanceMatrix
@@ -64,16 +70,28 @@ class GreedyNearestNeighborAlgorithm {
         int distanceA = (int) object[1];
         int firstNewVertex = (int) object[0];
         int[] newTable2 = deleteFromTableAndSaveInFile(firstNewVertex,intCoordinateList, fileWriter, bufferedWriter, nameOfFile,secondNewTable);
+        firstCycle.put(1, firstNewVertex);
 
         Object[] object2 = selectNextVertex(distanceMatrix2,maxDistanceNumber, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile,newTable2);
         int distanceB = (int) object2[1];
         int secondNewVertex = (int) object2[0];
 
         int[] newTableBySecondVertex = deleteFromTableAndSaveInFile(secondNewVertex, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile,newTable2);
+        secondCycle.put(1, secondNewVertex);
 
-        fillingFiles(firstVertex,firstNewVertex,maxDistanceNumber,secondNewVertex,newTableBySecondVertex,distanceMatrix2,intCoordinateList,fileWriter,bufferedWriter,nameOfFile,secondFileWriter,secondBufferedWriter,secondNameOfFile);
+        fillingFiles(firstVertex,firstNewVertex,maxDistanceNumber,secondNewVertex,newTableBySecondVertex,
+                distanceMatrix2,intCoordinateList,fileWriter,bufferedWriter,nameOfFile,secondFileWriter,
+                secondBufferedWriter,secondNameOfFile, firstCycle, secondCycle);
         closeBuffer(bufferedWriter, secondBufferedWriter);
 
+        firstCycle.put(firstCycle.keySet().size(), firstCycle.get(0));
+        secondCycle.put(secondCycle.keySet().size(), secondCycle.get(0));
+
+        // save cycles to files
+        Main.saveCycle(intCoordinateList, firstCycle, "first test");
+        Main.saveCycle(intCoordinateList, secondCycle, "second test");
+
+        return Main.getLengthFromCycle(firstCycle, distanceMatrix2) + Main.getLengthFromCycle(secondCycle,distanceMatrix2);
     }
 
 
@@ -150,7 +168,8 @@ class GreedyNearestNeighborAlgorithm {
 
     private static void fillingFiles(int firstVertex, int firstNewVertex, int maxDistanceNumber, int secondNewVertex, int[] newTableBySecondVertex, Long[][] distanceMatrix2, int[][] intCoordinateList,
                                      FileWriter fileWriter, BufferedWriter bufferedWriter, String nameOfFile,
-                                     FileWriter secondFileWriter, BufferedWriter secondBufferedWriter, String secondNameOfFile){
+                                     FileWriter secondFileWriter, BufferedWriter secondBufferedWriter, String secondNameOfFile,
+                                     Map<Integer, Integer> firstCycle, Map<Integer, Integer> secondCycle){
         int leftVertexFirst = firstVertex;
         int rightVertexFirst = firstNewVertex;
         int leftVertexSecond = maxDistanceNumber;
@@ -173,10 +192,15 @@ class GreedyNearestNeighborAlgorithm {
             if(distanceTmpFirstLeft <= distanceTmpFirstRight ){
                 tableOfficial = deleteFromTableAndSaveInFile(newVertexTmpFirstLeft, intCoordinateList, fileWriter, bufferedWriter, nameOfFile, tableOfficial);
                 leftVertexFirst = newVertexTmpFirstLeft;
+                for(int index=firstCycle.keySet().size()-1; index>=0; index--) {
+                    firstCycle.put(index+1, firstCycle.get(index));
+                }
+                firstCycle.put(0, newVertexTmpFirstLeft);
             }
             else {
                 tableOfficial = deleteFromTableAndSaveInFile(newVertexTmpFirstRight, intCoordinateList, fileWriter, bufferedWriter, nameOfFile, tableOfficial);
                 rightVertexFirst = newVertexTmpFirstRight;
+                firstCycle.put(firstCycle.keySet().size(), newVertexTmpFirstRight);
             }
 
             //second left
@@ -192,10 +216,15 @@ class GreedyNearestNeighborAlgorithm {
             if(distanceTmpSecondLeft <= distanceTmpSecondRight ){
                 tableOfficial = deleteFromTableAndSaveInFile(newVertexTmpSecondLeft, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile, tableOfficial);
                 leftVertexFirst = newVertexTmpSecondLeft;
+                for(int index=secondCycle.keySet().size()-1; index>=0; index--) {
+                    secondCycle.put(index+1, secondCycle.get(index));
+                }
+                secondCycle.put(0, newVertexTmpSecondLeft);
             }
             else {
                 tableOfficial = deleteFromTableAndSaveInFile(newVertexTmpSecondRight, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile, tableOfficial);
                 rightVertexFirst = newVertexTmpSecondRight;
+                secondCycle.put(secondCycle.keySet().size(), newVertexTmpSecondRight);
             }
         }
     }

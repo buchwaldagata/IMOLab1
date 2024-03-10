@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.*;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,10 +13,55 @@ public class Main {
 
 
         GreedyNearestNeighborAlgorithm greedyNearestNeighborAlgorithm = new GreedyNearestNeighborAlgorithm();
-        greedyNearestNeighborAlgorithm.runAlgorithm(intCoordinateList,distanceMatrix2);
+        Long max = (long) -1;
+        Long min = 1000000L;
+        int minIndex = -1;
+        int totalLength = 0;
 
-        GreedyCycleAlgorithm greedyCycleAlgorithm = new GreedyCycleAlgorithm();
-        greedyCycleAlgorithm.runAlgorithm(intCoordinateList,distanceMatrix2);
+        for (int i = 0 ; i < 100; i++) {
+            Long len = greedyNearestNeighborAlgorithm.runAlgorithm(i, intCoordinateList, distanceMatrix2);
+            if(len > max){
+                max = len;
+            }
+            if (len < min){
+                min = len;
+                minIndex = i;
+            }
+            totalLength+= len;
+        }
+        int avg = totalLength/100;
+
+        System.out.println("Maximum " + max);
+        System.out.println("Minimum " + min + " for " + minIndex);
+        System.out.println("Average " + avg);
+
+
+
+
+//        GreedyCycleAlgorithm greedyCycleAlgorithm = new GreedyCycleAlgorithm();
+//        Long maxGreedyCycle = (long) -1;
+//        Long minGreedyCycle = 1000000L;
+//        int minIndexGreedyCycle = -1;
+//        int totalLengthGreedyCycle = 0;
+//        for (int i = 0 ; i < 100; i++) {
+//            Long lenGreedyCycle = greedyCycleAlgorithm.runAlgorithm(i, intCoordinateList,distanceMatrix2);
+//            if(lenGreedyCycle > maxGreedyCycle){
+//                maxGreedyCycle = lenGreedyCycle;
+//            }
+//            if (lenGreedyCycle < minGreedyCycle){
+//                minGreedyCycle = lenGreedyCycle;
+//                minIndexGreedyCycle = i;
+//            }
+//            totalLengthGreedyCycle+= lenGreedyCycle;
+//        }
+//        int avgGreedyCycle = totalLengthGreedyCycle/100;
+//
+//        System.out.println("Maximum " + maxGreedyCycle);
+//        System.out.println("Minimum " + minGreedyCycle + " for " + minIndexGreedyCycle);
+//        System.out.println("Average " + avgGreedyCycle);
+//
+
+
     }
 
     static void saveToFile(FileWriter fileWriter, BufferedWriter bufferedWriter, int firstVertex, int x, int y, String nameOfFile){
@@ -30,5 +76,37 @@ public class Main {
 
     private static void writePointToCsv(BufferedWriter bufferedWriter, int vertex, int x, int y) throws IOException {
         bufferedWriter.write(vertex + "," + x + "," + y + "\n");
+    }
+    public static Long getLengthFromCycle(Map<Integer, Integer> cycle, Long[][] distanceMatrix) {
+        Long len = 0L;
+        for(int i=0; i<cycle.keySet().size()-1; i++) {
+            int fromVertex = cycle.get(i);
+            int toVertex = cycle.get(i+1);
+            len += distanceMatrix[fromVertex][toVertex];
+        }
+        return len;
+    }
+
+    static void saveCycle(int[][] coordinateList, Map<Integer, Integer> cycle, String filename) {
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(filename);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        for(int i: cycle.keySet()) {
+            int vertex = cycle.get(i);
+            for (int[] coordinateRow: coordinateList) {
+                if(vertex==coordinateRow[0]) {
+                    Main.saveToFile(fileWriter, bufferedWriter, coordinateRow[0], coordinateRow[1], coordinateRow[2], filename);
+                }
+            }
+        }
+        try {
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

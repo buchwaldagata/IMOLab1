@@ -72,15 +72,12 @@ public class Main {
 
         // delete first and last vertex
         int[] newTable = deleteIndexFromTable(firstVertex, table);
-        int[] secondNewTable = deleteIndexFromTable(maxDistanceNumber, newTable);
-//        displayTable(newTable);
-//        System.out.println();
-//        displayTable(secondNewTable);
+        int[] secondNewTable = deleteIndexFromTable(searchIndex(maxDistanceNumber, newTable), newTable);
 
 
-        selectNextVertex(distanceMatrix2,firstVertex, intCoordinateList, fileWriter, bufferedWriter, nameOfFile);
-        selectNextVertex(distanceMatrix2,maxDistanceNumber, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile);
-
+        secondNewTable = selectNextVertex(distanceMatrix2,firstVertex, intCoordinateList, fileWriter, bufferedWriter, nameOfFile,secondNewTable);
+        secondNewTable = selectNextVertex(distanceMatrix2,maxDistanceNumber, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile, secondNewTable);
+        displayTable(secondNewTable);
 
         try {
             bufferedWriter.close();
@@ -149,11 +146,19 @@ public class Main {
         }
     }
 
-    private static void selectNextVertex
-            (Long[][] matrix, int vertex, int[][] coordinateList, FileWriter fileWriter, BufferedWriter bufferedWriter, String nameOfFile ){
+    private static int[] selectNextVertex
+            (Long[][] matrix, int vertex, int[][] coordinateList, FileWriter fileWriter, BufferedWriter bufferedWriter, String nameOfFile,int[] table){
         int firstDistance = 1000000;
         int firstNextVertex = -1;
         for (int j = 0; j < matrix.length; j++){
+//            for (int element : tablica) {
+//                if (element == szukanaLiczba) {
+//                    liczbaZnaleziona = true;
+//                    break;
+//                }
+//            }
+
+
             int distance = Math.toIntExact(matrix[vertex][j]);
             if (distance != 0 && distance < firstDistance){
                 firstDistance = distance;
@@ -161,9 +166,20 @@ public class Main {
             }
         }
 
+        deleteIndexFromTable(searchIndex(firstNextVertex, table), table);
         int x = coordinateList[firstNextVertex][1];
         int y = coordinateList[firstNextVertex][2];
         saveToFile(fileWriter,bufferedWriter,firstNextVertex,x,y,nameOfFile);
+        return table;
     }
-
+    private static int searchIndex(int searchNumber, int[] table){
+        int index = -1;
+        for (int i = 0; i < table.length; i++) {
+            if (table[i] == searchNumber) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 }

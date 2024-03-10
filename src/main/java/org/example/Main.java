@@ -79,15 +79,12 @@ public class Main {
         int[] table = createTable();
 
         // usuniecie z niej wierzcholka pierwszego i ostatniego
-
-        int indexToDelete = firstVertex;
-        int[] newTable = deleteIndexFromTable(indexToDelete, table);
+        int[] newTable = deleteIndexFromTable(firstVertex, table);
         int[] secondNewTable = deleteIndexFromTable(maxDistanceNumber, newTable);
+        displayTable(newTable);
+        System.out.println();
+        displayTable(secondNewTable);
 
-
-        for (int element : secondNewTable) {
-            System.out.print(element + " ");
-        }
 
         try {
             bufferedWriter.close();
@@ -148,6 +145,12 @@ public class Main {
         System.arraycopy(table, 0, newTable, 0, newTable.length);
 
         return newTable;
+    }
+
+    private static void displayTable(int[] table){
+        for (int element : table) {
+            System.out.print(element + " ");
+        }
     }
 
 }

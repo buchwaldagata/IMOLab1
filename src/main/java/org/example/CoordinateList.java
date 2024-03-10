@@ -67,6 +67,10 @@ public class CoordinateList {
             }
         }
 
+        for (int i = 0; i < 100; i++){
+            table[i][0] = table[i][0]-1;
+        }
+
         return table;
     }
 

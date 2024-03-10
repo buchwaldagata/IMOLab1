@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        CoordinateList coordinateList = new CoordinateList("src/resources/kroA100.tsp");
+        CoordinateList coordinateList = new CoordinateList("src/resources/kroB100.tsp");
         int[][] intCoordinateList = coordinateList.intCoordinateList;
         DistanceMatrix distanceMatrix = new DistanceMatrix(intCoordinateList);
         Long[][] distanceMatrix2 = distanceMatrix.distanceMatrix;
@@ -38,28 +38,28 @@ public class Main {
 
 
 
-//        GreedyCycleAlgorithm greedyCycleAlgorithm = new GreedyCycleAlgorithm();
-//        Long maxGreedyCycle = (long) -1;
-//        Long minGreedyCycle = 1000000L;
-//        int minIndexGreedyCycle = -1;
-//        int totalLengthGreedyCycle = 0;
-//        for (int i = 0 ; i < 100; i++) {
-//            Long lenGreedyCycle = greedyCycleAlgorithm.runAlgorithm(i, intCoordinateList,distanceMatrix2);
-//            if(lenGreedyCycle > maxGreedyCycle){
-//                maxGreedyCycle = lenGreedyCycle;
-//            }
-//            if (lenGreedyCycle < minGreedyCycle){
-//                minGreedyCycle = lenGreedyCycle;
-//                minIndexGreedyCycle = i;
-//            }
-//            totalLengthGreedyCycle+= lenGreedyCycle;
-//        }
-//        int avgGreedyCycle = totalLengthGreedyCycle/100;
-//
-//        System.out.println("Maximum " + maxGreedyCycle);
-//        System.out.println("Minimum " + minGreedyCycle + " for " + minIndexGreedyCycle);
-//        System.out.println("Average " + avgGreedyCycle);
-//
+        GreedyCycleAlgorithm greedyCycleAlgorithm = new GreedyCycleAlgorithm();
+        Long maxGreedyCycle = (long) -1;
+        Long minGreedyCycle = 1000000L;
+        int minIndexGreedyCycle = -1;
+        int totalLengthGreedyCycle = 0;
+        for (int i = 0 ; i < 100; i++) {
+            Long lenGreedyCycle = greedyCycleAlgorithm.runAlgorithm(i, intCoordinateList,distanceMatrix2);
+            if(lenGreedyCycle > maxGreedyCycle){
+                maxGreedyCycle = lenGreedyCycle;
+            }
+            if (lenGreedyCycle < minGreedyCycle){
+                minGreedyCycle = lenGreedyCycle;
+                minIndexGreedyCycle = i;
+            }
+            totalLengthGreedyCycle+= lenGreedyCycle;
+        }
+        int avgGreedyCycle = totalLengthGreedyCycle/100;
+
+        System.out.println("Maximum " + maxGreedyCycle);
+        System.out.println("Minimum " + minGreedyCycle + " for " + minIndexGreedyCycle);
+        System.out.println("Average " + avgGreedyCycle);
+
 
 
     }

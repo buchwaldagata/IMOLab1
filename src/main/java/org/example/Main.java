@@ -4,6 +4,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Collections.list;
+import static java.util.EnumSet.range;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -71,6 +75,20 @@ public class Main {
         saveToFile(secondFileWriter,secondBufferedWriter,maxDistanceNumber,x2,y2,secondNameOfFile);
 
 
+        //tworzenie tablicy
+        int[] table = createTable();
+
+        // usuniecie z niej wierzcholka pierwszego i ostatniego
+
+        int indexToDelete = firstVertex;
+        int[] newTable = deleteIndexFromTable(indexToDelete, table);
+        int[] secondNewTable = deleteIndexFromTable(maxDistanceNumber, newTable);
+
+
+        for (int element : secondNewTable) {
+            System.out.print(element + " ");
+        }
+
         try {
             bufferedWriter.close();
             secondBufferedWriter.close();
@@ -107,13 +125,29 @@ public class Main {
     private static void saveToFile(FileWriter fileWriter, BufferedWriter bufferedWriter, int firstVertex, int x, int y, String nameOfFile){
         try {
             writePointToCsv(bufferedWriter, firstVertex, x, y);
-//            bufferedWriter.close();
-
             System.out.println("Liczby zostały zapisane do pliku " + nameOfFile);
 
         } catch (IOException e) {
             System.err.println("Wystąpił błąd podczas zapisywania do pliku: " + e.getMessage());
         }
+    }
+    private static int[] createTable(){
+        int[] table = new int[100];
+        for (int i = 0; i < 100; i++) {
+            table[i] = i;
+        }
+        return table;
+    }
+    private static int[] deleteIndexFromTable(int indexToDelete, int[] table){
+
+        for (int i = indexToDelete; i < table.length - 1; i++) {
+            table[i] = table[i + 1];
+        }
+
+        int[] newTable = new int[table.length - 1];
+        System.arraycopy(table, 0, newTable, 0, newTable.length);
+
+        return newTable;
     }
 
 }

@@ -37,8 +37,6 @@ public class Main {
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
         saveToFile(fileWriter,bufferedWriter,firstVertex,x1,y1,nameOfFile);
-//        saveToFile(fileWriter,bufferedWriter,2,3,4,nameOfFile);
-
         System.out.println(distanceMatrix2[firstVertex]);
 
         Long maxDistance = 0L;
@@ -70,14 +68,56 @@ public class Main {
 
         int[] table = createTable();
 
-        // delete first and last vertex
+        // delete first and last vertex from table and distanceMatrix
         int[] newTable = deleteIndexFromTable(firstVertex, table);
         int[] secondNewTable = deleteIndexFromTable(searchIndex(maxDistanceNumber, newTable), newTable);
 
 
-        secondNewTable = selectNextVertex(distanceMatrix2,firstVertex, intCoordinateList, fileWriter, bufferedWriter, nameOfFile,secondNewTable);
-        secondNewTable = selectNextVertex(distanceMatrix2,maxDistanceNumber, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile, secondNewTable);
-        displayTable(secondNewTable);
+        // wybbor nowego wierzcholka i nowej tabeli
+        Object[] object = selectNextVertex(distanceMatrix2,firstVertex, intCoordinateList, fileWriter, bufferedWriter, nameOfFile,secondNewTable);
+        secondNewTable = (int[]) object[1];
+        int firstNewVertex = (int) object[0];
+        int[] newTable2 = deleteIndexFromTable(firstNewVertex, secondNewTable);
+
+        Object[] object2 = selectNextVertex(distanceMatrix2,maxDistanceNumber, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile,secondNewTable);
+        secondNewTable = (int[]) object2[1];
+        int secondNewVertex = (int) object2[0];
+        int[] newTableBySecondVertex = deleteIndexFromTable(firstNewVertex, secondNewTable);
+
+
+        int leftVertexFirst = firstVertex;
+        int rightVertexFirst = firstNewVertex;
+        int leftVertexSecond = maxDistanceNumber;
+        int rightVertexSecond = secondNewVertex;
+
+        for (int i =0; i< distanceMatrix2.length/2 - 4; i++){
+            //obliczany lewy
+            Object[] objectTmp = selectNextVertex(distanceMatrix2,leftVertexFirst, intCoordinateList, fileWriter, bufferedWriter, nameOfFile,secondNewTable);
+            int[] secondNewTableTmp = (int[]) object[1];
+            int firstNewVertexTmp = (int) object[0];
+
+
+            //obliczany prawy
+            Object[] objectTmp2 = selectNextVertex(distanceMatrix2,rightVertexFirst, intCoordinateList, fileWriter, bufferedWriter, nameOfFile,secondNewTable);
+            int[] secondNewTableTmp2 = (int[]) object[1];
+            int firstNewVertexTmp2 = (int) object[0];
+
+
+            if(distanceMatrix2[leftVertexFirst][firstNewVertexTmp] <=distanceMatrix2[rightVertexFirst][firstNewVertexTmp2] ){
+
+            }
+            else {
+
+            }
+//            int[] newTableTmp = deleteIndexFromTable(firstNewVertexTmp, secondNewTableTmp);
+
+//            Object[] object2 = selectNextVertex(distanceMatrix2,maxDistanceNumber, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile,secondNewTable);
+//            secondNewTable = (int[]) object2[1];
+//            int secondNewVertex = (int) object2[0];
+//            int[] newTableBySecondVertex = deleteIndexFromTable(firstNewVertex, secondNewTable);
+
+        }
+
 
         try {
             bufferedWriter.close();
@@ -146,7 +186,7 @@ public class Main {
         }
     }
 
-    private static int[] selectNextVertex
+    private static Object[] selectNextVertex
             (Long[][] matrix, int vertex, int[][] coordinateList, FileWriter fileWriter, BufferedWriter bufferedWriter, String nameOfFile,int[] table){
         int firstDistance = 1000000;
         int firstNextVertex = -1;
@@ -170,7 +210,8 @@ public class Main {
         int x = coordinateList[firstNextVertex][1];
         int y = coordinateList[firstNextVertex][2];
         saveToFile(fileWriter,bufferedWriter,firstNextVertex,x,y,nameOfFile);
-        return table;
+        Object[] result = {firstNextVertex, table};
+        return result;
     }
     private static int searchIndex(int searchNumber, int[] table){
         int index = -1;
@@ -182,4 +223,32 @@ public class Main {
         }
         return index;
     }
+
+    private static Long[][] removeRowAndColumn(Long[][] matrix, int rowIndex) {
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+
+        Long[][] modifiedMatrix = new Long[numRows - 1][numCols - 1];
+
+        for (int i = 0, k = 0; i < numRows; i++) {
+            if (i == rowIndex) {
+                continue; // Skip the row to be removed
+            }
+
+            for (int j = 0, l = 0; j < numCols; j++) {
+                if (j == rowIndex) {
+                    continue; // Skip the column to be removed
+                }
+
+                modifiedMatrix[k][l] = (long) Math.toIntExact(matrix[i][j]);
+                l++;
+            }
+
+            k++;
+        }
+
+        return modifiedMatrix;
+    }
+
+
 }

@@ -96,7 +96,7 @@ public class Main {
 //        distanceMatrix2.length/2 - 4
         int[] tableOfficial = newTableBySecondVertex;
 
-        for (int i =0; i< distanceMatrix2.length/2 - 4; i++){
+        for (int i =0; i< distanceMatrix2.length/2 - 2; i++){
             //obliczany lewy
             Object[] objectTmpFirstLeft = selectNextVertex(distanceMatrix2,leftVertexFirst, intCoordinateList, fileWriter, bufferedWriter, nameOfFile,tableOfficial);
             int distanceTmpFirstLeft = (int) objectTmpFirstLeft[1];

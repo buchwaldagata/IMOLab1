@@ -1,12 +1,6 @@
 package org.example;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static java.util.Collections.list;
-import static java.util.EnumSet.range;
 
 public class Main {
     public static void main(String[] args) {
@@ -83,28 +77,9 @@ public class Main {
 //        System.out.println();
 //        displayTable(secondNewTable);
 
-        int firstDistance = 1000000;
-        int secondDistance = 1000000;
-        int firstNextVertex = -1;
-        int secondNextValue = -1;
-//        for(int i = 0; i < secondNewTable.length; i++){
-//
-//        }
 
-        for (int j = 0; j < distanceMatrix2.length; j++){
-            int distance = Math.toIntExact(distanceMatrix2[firstVertex][j]);
-            if (distance != 0 && distance < firstDistance){
-                firstDistance = distance;
-                firstNextVertex = j;
-            }
-        }
-
-        int x = intCoordinateList[firstNextVertex][1];
-        int y = intCoordinateList[firstNextVertex][2];
-        saveToFile(fileWriter,bufferedWriter,firstNextVertex,x,y,nameOfFile);
-
-
-
+        selectNextVertex(distanceMatrix2,firstVertex, intCoordinateList, fileWriter, bufferedWriter, nameOfFile);
+        selectNextVertex(distanceMatrix2,maxDistanceNumber, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile);
 
 
         try {
@@ -172,6 +147,23 @@ public class Main {
         for (int element : table) {
             System.out.print(element + " ");
         }
+    }
+
+    private static void selectNextVertex
+            (Long[][] matrix, int vertex, int[][] coordinateList, FileWriter fileWriter, BufferedWriter bufferedWriter, String nameOfFile ){
+        int firstDistance = 1000000;
+        int firstNextVertex = -1;
+        for (int j = 0; j < matrix.length; j++){
+            int distance = Math.toIntExact(matrix[vertex][j]);
+            if (distance != 0 && distance < firstDistance){
+                firstDistance = distance;
+                firstNextVertex = j;
+            }
+        }
+
+        int x = coordinateList[firstNextVertex][1];
+        int y = coordinateList[firstNextVertex][2];
+        saveToFile(fileWriter,bufferedWriter,firstNextVertex,x,y,nameOfFile);
     }
 
 }

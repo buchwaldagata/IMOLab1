@@ -6,11 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 class GreedyNearestNeighborAlgorithm {
-    public void runAlgorithm(){
-        CoordinateList coordinateList = new CoordinateList("src/resources/kroA100.tsp");
-        int[][] intCoordinateList = coordinateList.intCoordinateList;
-        DistanceMatrix distanceMatrix = new DistanceMatrix(intCoordinateList);
-        Long[][] distanceMatrix2 = distanceMatrix.distanceMatrix;
+    public void runAlgorithm(int[][] intCoordinateList, Long[][] distanceMatrix2 ){
 
         int firstVertex = chooseRandomNumber(100);
         int x1 = intCoordinateList[firstVertex][1];
@@ -25,7 +21,7 @@ class GreedyNearestNeighborAlgorithm {
         }
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-        saveToFile(fileWriter,bufferedWriter,firstVertex,x1,y1,nameOfFile);
+        Main.saveToFile(fileWriter,bufferedWriter,firstVertex,x1,y1,nameOfFile);
         System.out.println(distanceMatrix2[firstVertex]);
 
         Long maxDistance = 0L;
@@ -53,7 +49,7 @@ class GreedyNearestNeighborAlgorithm {
         }
         BufferedWriter secondBufferedWriter = new BufferedWriter(secondFileWriter);
 
-        saveToFile(secondFileWriter,secondBufferedWriter,maxDistanceNumber,x2,y2,secondNameOfFile);
+        Main.saveToFile(secondFileWriter,secondBufferedWriter,maxDistanceNumber,x2,y2,secondNameOfFile);
 
         int[] table = createTable();
 
@@ -68,7 +64,6 @@ class GreedyNearestNeighborAlgorithm {
         int distanceA = (int) object[1];
         int firstNewVertex = (int) object[0];
         int[] newTable2 = deleteFromTableAndSaveInFile(firstNewVertex,intCoordinateList, fileWriter, bufferedWriter, nameOfFile,secondNewTable);
-//        int[] newTable2 = deleteIndexFromTable(firstNewVertex, newTable2);
 
         Object[] object2 = selectNextVertex(distanceMatrix2,maxDistanceNumber, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile,newTable2);
         int distanceB = (int) object2[1];
@@ -88,38 +83,9 @@ class GreedyNearestNeighborAlgorithm {
         return firstVertex;
     }
 
-    private static void writePointToCsv(BufferedWriter bufferedWriter, int vertex, int x, int y) throws IOException {
-        bufferedWriter.write(vertex + "," + x + "," + y + "\n");
-    }
 
 
-    private static void displayCoordinatesList(int[][] coordinatesList){
-        for (int i = 0; i < coordinatesList.length; i++) {
-            for (int j = 0; j < coordinatesList[i].length; j++) {
-                System.out.print(coordinatesList[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
 
-    private static void displayDistanceMatrix(Long[][] distanceMatrix){
-        for (int i = 0; i < distanceMatrix.length; i++) {
-            for (int j = 0; j < distanceMatrix[i].length; j++) {
-                System.out.print(distanceMatrix[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    private static void saveToFile(FileWriter fileWriter, BufferedWriter bufferedWriter, int firstVertex, int x, int y, String nameOfFile){
-        try {
-            writePointToCsv(bufferedWriter, firstVertex, x, y);
-            System.out.println("Liczby zostały zapisane do pliku " + nameOfFile);
-
-        } catch (IOException e) {
-            System.err.println("Wystąpił błąd podczas zapisywania do pliku: " + e.getMessage());
-        }
-    }
     private static int[] createTable(){
         int[] table = new int[100];
         for (int i = 0; i < 100; i++) {
@@ -139,12 +105,6 @@ class GreedyNearestNeighborAlgorithm {
         return newTable;
     }
 
-    private static void displayTable(int[] table){
-        for (int element : table) {
-            System.out.print(element + " ");
-        }
-    }
-
     private static Object[] selectNextVertex
             (Long[][] matrix, int vertex, int[][] coordinateList, FileWriter fileWriter, BufferedWriter bufferedWriter, String nameOfFile,int[] table){
         int firstDistance = 1000000;
@@ -157,7 +117,6 @@ class GreedyNearestNeighborAlgorithm {
                 firstNextVertex = j;
             }
         }
-//        Object[] result = {firstNextVertex, table};
         Object[] result = {firstNextVertex, firstDistance};
         return result;
     }
@@ -165,7 +124,7 @@ class GreedyNearestNeighborAlgorithm {
         int[] newTable = deleteIndexFromTable(searchIndex(firstNextVertex, table), table);
         int x = coordinateList[firstNextVertex][1];
         int y = coordinateList[firstNextVertex][2];
-        saveToFile(fileWriter,bufferedWriter,firstNextVertex,x,y,nameOfFile);
+        Main.saveToFile(fileWriter,bufferedWriter,firstNextVertex,x,y,nameOfFile);
 
         return newTable;
     }

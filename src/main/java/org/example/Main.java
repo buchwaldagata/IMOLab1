@@ -96,7 +96,7 @@ public class Main {
 //        distanceMatrix2.length/2 - 4
         int[] tableOfficial = newTableBySecondVertex;
 
-        for (int i =0; i< 2; i++){
+        for (int i =0; i< distanceMatrix2.length/2 - 4; i++){
             //obliczany lewy
             Object[] objectTmpFirstLeft = selectNextVertex(distanceMatrix2,leftVertexFirst, intCoordinateList, fileWriter, bufferedWriter, nameOfFile,tableOfficial);
             int distanceTmpFirstLeft = (int) objectTmpFirstLeft[1];
@@ -119,9 +119,6 @@ public class Main {
                 rightVertexFirst = newVertexTmpFirstRight;
             }
 
-
-
-
             //obliczany lewy drugiego
             Object[] objectTmpSecondLeft = selectNextVertex(distanceMatrix2,leftVertexSecond, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile,tableOfficial);
             int distanceTmpSecondLeft = (int) objectTmpSecondLeft[1];
@@ -132,15 +129,12 @@ public class Main {
             int distanceTmpSecondRight = (int) objectTmpSecondRight[1];
             int newVertexTmpSecondRight = (int) objectTmpSecondRight[0];
 
-
             if(distanceTmpSecondLeft <= distanceTmpSecondRight ){
                 tableOfficial = deleteFromTableAndSaveInFile(newVertexTmpSecondLeft, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile, tableOfficial);
-//                int[] tableTmpByNextVertexFirst = deleteIndexFromTable(newVertexTmpFirstLeft, tableTmpFirstLeft);
                 leftVertexFirst = newVertexTmpSecondLeft;
             }
             else {
                 tableOfficial = deleteFromTableAndSaveInFile(newVertexTmpSecondRight, intCoordinateList, secondFileWriter, secondBufferedWriter, secondNameOfFile, tableOfficial);
-//                int[] tableTmpByNExtVertexFirst = deleteIndexFromTable(newVertexTmpFirstRight, tableTmpFirstRight);
                 rightVertexFirst = newVertexTmpSecondRight;
             }
         }

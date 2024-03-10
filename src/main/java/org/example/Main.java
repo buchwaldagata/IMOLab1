@@ -6,53 +6,53 @@ import java.util.Arrays;
 import java.util.List;
 public class Main {
     public static void main(String[] args) {
-        List<List<String>> preparedLinesFromFileKroA= prepareLinesFromFile("src/resources/kroA100.tsp");
 
-        List<List<Integer>> intPreparedLinesFromFileKroA = convertStringToListMatrix(preparedLinesFromFileKroA);
-        printListList(intPreparedLinesFromFileKroA);
+        CoordinateList coordinateList = new CoordinateList("src/resources/kroA100.tsp");
+        int[][] intCoordinateList = coordinateList.intCoordinateList;
+        DistanceMatrix distanceMatrix = new DistanceMatrix(intCoordinateList);
+        Long[][] distanceMatrix2 = distanceMatrix.distanceMatrix;
 
-        String distanceMatrixKroAString = countEuclideanDistanceFromFile(preparedLinesFromFileKroA);
-        int[][] distanceMatrixKroA = parseStringToDistanceMatrix(distanceMatrixKroAString);
-         displayDistanceMatrix(distanceMatrixKroA);
+
+
+
+
+        displayCoordinatesList(intCoordinateList);
+        displayDistanceMatrix(distanceMatrix2);
         System.out.println();
 
         GreedyNearestNeighborAlgorithm greedyNearestNeighborAlgorithm = new GreedyNearestNeighborAlgorithm();
         int firstVertex = greedyNearestNeighborAlgorithm.runAlgorithm();
         System.out.println(firstVertex);
 
-        System.out.println(preparedLinesFromFileKroA.get(firstVertex));
-        int x1 = intPreparedLinesFromFileKroA.get(firstVertex).get(1);
-        int y1 = intPreparedLinesFromFileKroA.get(firstVertex).get(2);
+        System.out.println(intCoordinateList[firstVertex][0]);
+        int x1 = intCoordinateList[firstVertex][1];
+        int y1 = intCoordinateList[firstVertex][2];
         System.out.println(x1);
         System.out.println(y1);
 
         saveToFile(firstVertex,x1,y1,"Greedy Nearest Neighbor Algorithm - first");
 
 
-        // sprawdzenie najdalszego i zapisanie do drugiego pliku
+        System.out.println(distanceMatrix2[firstVertex]);
 
-        System.out.println(distanceMatrixKroA[firstVertex]);
-
-        int maxDistance = 0;
+        Long maxDistance = 0L;
         int maxDistanceNumber = firstVertex;
-        for (int j = 0; j < distanceMatrixKroA[firstVertex].length; j++) {
-            if (distanceMatrixKroA[firstVertex][j] > maxDistance){
-                maxDistance = distanceMatrixKroA[firstVertex][j];
+        for (int j = 0; j < distanceMatrix2[firstVertex].length; j++) {
+            if (distanceMatrix2[firstVertex][j] > maxDistance){
+                maxDistance = distanceMatrix2[firstVertex][j];
                 maxDistanceNumber = j;
             }
-            System.out.print(distanceMatrixKroA[firstVertex][j] + " ");
+            System.out.print(distanceMatrix2[firstVertex][j] + " ");
         }
         System.out.println();
         System.out.println(maxDistance);
         System.out.println(maxDistanceNumber);
 
+        int x2 = intCoordinateList[maxDistanceNumber][1];
+        int y2 = intCoordinateList[maxDistanceNumber][2];
 
-        int x2 = intPreparedLinesFromFileKroA.get(maxDistanceNumber).get(1);
-        int y2 = intPreparedLinesFromFileKroA.get(maxDistanceNumber).get(2);
-        
-        
+//
         saveToFile(maxDistanceNumber,x2,y2,"Greedy Nearest Neighbor Algorithm - second");
-        //zapisanie drugiego do durgiego pliku
 
 
 
@@ -159,7 +159,16 @@ public class Main {
         return matrix;
     }
 
-    private static void displayDistanceMatrix(int[][] distanceMatrix){
+    private static void displayCoordinatesList(int[][] coordinatesList){
+        for (int i = 0; i < coordinatesList.length; i++) {
+            for (int j = 0; j < coordinatesList[i].length; j++) {
+                System.out.print(coordinatesList[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    private static void displayDistanceMatrix(Long[][] distanceMatrix){
         for (int i = 0; i < distanceMatrix.length; i++) {
             for (int j = 0; j < distanceMatrix[i].length; j++) {
                 System.out.print(distanceMatrix[i][j] + " ");

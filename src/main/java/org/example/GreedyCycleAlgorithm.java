@@ -1,8 +1,5 @@
 package org.example;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +18,6 @@ public class GreedyCycleAlgorithm {
         Map<Integer, Integer> secondCycle = new HashMap<>();
 
         // assign first vertex to first cycle
-        RandomNumber randomNumber = new RandomNumber();
         addVertexToCycle(unassignedVertices, firstCycle, firstVertex, 0);
 
         // find max distance vertex
@@ -55,8 +51,8 @@ public class GreedyCycleAlgorithm {
         }
 
         // save cycles to files
-        saveCycle(coordinateList, firstCycle, "Greedy Cycle first" + firstVertex);
-        saveCycle(coordinateList, secondCycle, "Greedy Cycle second" + firstVertex);
+        Main.saveCycle(coordinateList, firstCycle, "Greedy Cycle first " + firstVertex);
+        Main.saveCycle(coordinateList, secondCycle, "Greedy Cycle second " + firstVertex);
         return Main.getLengthFromCycle(firstCycle, distanceMatrix) + Main.getLengthFromCycle(secondCycle,distanceMatrix);
     }
 
@@ -115,28 +111,5 @@ public class GreedyCycleAlgorithm {
             cycle.put(i+1, cycle.get(i));
         }
         addVertexToCycle(unassignedVertices, cycle, resultNewVertex, resultNewVertexNumberInCycle);
-    }
-
-    private static void saveCycle(int[][] coordinateList, Map<Integer, Integer> cycle, String filename) {
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter(filename);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        for(int i: cycle.keySet()) {
-            int vertex = cycle.get(i);
-            for (int[] coordinateRow: coordinateList) {
-                if(vertex==coordinateRow[0]) {
-                    Main.saveToFile(fileWriter, bufferedWriter, coordinateRow[0], coordinateRow[1], coordinateRow[2], filename);
-                }
-            }
-        }
-        try {
-            bufferedWriter.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

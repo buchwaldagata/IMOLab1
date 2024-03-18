@@ -30,7 +30,7 @@ public class Main {
             totalLength+= len;
         }
         int avg = totalLength/100;
-
+        System.out.println("Greedy Nearest Neighbor");
         System.out.println("Maximum " + max);
         System.out.println("Minimum " + min + " for " + minIndex);
         System.out.println("Average " + avg);
@@ -56,6 +56,7 @@ public class Main {
         }
         int avgGreedyCycle = totalLengthGreedyCycle/100;
 
+        System.out.println("\nGreedy Cycle");
         System.out.println("Maximum " + maxGreedyCycle);
         System.out.println("Minimum " + minGreedyCycle + " for " + minIndexGreedyCycle);
         System.out.println("Average " + avgGreedyCycle);
@@ -64,10 +65,10 @@ public class Main {
 
     }
 
-    static void saveToFile(FileWriter fileWriter, BufferedWriter bufferedWriter, int firstVertex, int x, int y, String nameOfFile){
+    static void saveToFile(BufferedWriter bufferedWriter, int firstVertex, int x, int y, String nameOfFile){
         try {
             writePointToCsv(bufferedWriter, firstVertex, x, y);
-            System.out.println("Liczby zostały zapisane do pliku " + nameOfFile);
+//            System.out.println("Liczby zostały zapisane do pliku " + nameOfFile);
 
         } catch (IOException e) {
             System.err.println("Wystąpił błąd podczas zapisywania do pliku: " + e.getMessage());
@@ -99,7 +100,7 @@ public class Main {
             int vertex = cycle.get(i);
             for (int[] coordinateRow: coordinateList) {
                 if(vertex==coordinateRow[0]) {
-                    Main.saveToFile(fileWriter, bufferedWriter, coordinateRow[0], coordinateRow[1], coordinateRow[2], filename);
+                    Main.saveToFile(bufferedWriter, coordinateRow[0], coordinateRow[1], coordinateRow[2], filename);
                 }
             }
         }

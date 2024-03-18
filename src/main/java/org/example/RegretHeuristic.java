@@ -53,19 +53,7 @@ public  class RegretHeuristic {
                 regret= - lengthOfPossibleInsertions.get(0).getValue();
             }
             bests.add(new Pair<>(new Pair<>(lengthOfPossibleInsertions.get(0).getKey(),choosedVertex),regret));
-//            for (int choosedVertex : availableVert) {
-//                Map.Entry<Integer, Double> firstEntry = calcRegret(current, choosedVertex, distanceMatrix).entrySet().iterator().next();
-//                bestVertex.put(firstEntry.getKey(), firstEntry.getValue());
-//                regret.add(firstEntry.getValue());
-//            }
-//            LinkedHashMap<Integer, Double> result = bestVertex.entrySet().stream()
-//                    .sorted(Map.Entry.<Integer, Double>comparingByValue(byRegretDescending))
-//                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-//            Map.Entry<Integer, Double> firstEntry = result.entrySet().iterator().next();
-//            int vertex = current.get(regret.indexOf(Collections.max(regret)));
-//            int position = firstEntry.getKey();
-//            HashMap<Integer, Integer> resultVertexPosition = new HashMap<>();
-//            resultVertexPosition.put(position, vertex);
+
         }
         bests.sort(new Comparator<Pair<Pair<Integer,Integer>, Double>>() {
             @Override
@@ -82,29 +70,7 @@ public  class RegretHeuristic {
         return new Pair<>(bests.get(0).getKey().getKey(),bests.get(0).getKey().getValue());
     }
 
-//    private HashMap<Integer,Double> calcRegret(List<Integer> current, Integer choosedVertex ,List<List<Integer>> distanceMatrix){
-//        HashMap<Integer,Double> regret=new HashMap<>();
-//        Comparator<Double> byCost = Double::compareTo;
-//
-//        for(int i = 0; i < current.size()-1; i++){
-//            List<Integer> tempCycle = new ArrayList<>(current);
-//            tempCycle.add(i,choosedVertex);
-//            double lengthCycle = 0;
-//            for(int j =0; j < tempCycle.size()-2; j++){
-//                lengthCycle += distanceMatrix.get(tempCycle.get(j)).get(tempCycle.get(j+1));
-//            }
-//            lengthCycle+=distanceMatrix.get(tempCycle.get(tempCycle.size()-1)).get(tempCycle.get(0));
-//            regret.put(i, lengthCycle);
-//        }
-//        LinkedHashMap<Integer, Double> result=regret.entrySet().stream()
-//                .sorted(Map.Entry.<Integer, Double>comparingByValue(byCost))
-//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-//        Map.Entry<Integer, Double> firstEntry = result.entrySet().iterator().next();
-//        Map.Entry<Integer, Double> secondEntry = result.entrySet().iterator().next();
-//        HashMap<Integer,Double> positionRegret=new HashMap<>();
-//        positionRegret.put(firstEntry.getKey(),(secondEntry.getValue()-firstEntry.getValue()));
-//        return positionRegret;
-//    }
+
     private void solve(Instance instance,int startingPoint1, int startingPoint2){
         List<List<Integer>> distanceMatrix = instance.getDistanceMatrix();
         Set<Integer> availableVert = IntStream.rangeClosed(0, distanceMatrix.size() - 1).boxed().collect(Collectors.toSet());
